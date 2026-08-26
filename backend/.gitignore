@@ -62,3 +62,4 @@ coverage/
 # Storybook files
 out/
 .storybook-out/
+.env.local

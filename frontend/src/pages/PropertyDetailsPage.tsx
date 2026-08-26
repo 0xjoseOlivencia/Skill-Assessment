@@ -10,6 +10,7 @@ import PropertyAbout from '../components/property-details/PropertyAbout';
 import PropertyAmenities from '../components/property-details/PropertyAmenities';
 import PropertyLocation from '../components/property-details/PropertyLocation';
 import ScheduleViewingCard from '../components/property-details/ScheduleViewingCard';
+import WalletConnect from '../components/property-details/WalletConnect';
 import { propertiesAPI } from '../services/api';
 import { useSEO } from '../hooks/useSEO';
 import StructuredData from '../components/common/StructuredData';
@@ -199,9 +200,12 @@ const PropertyDetailsPage: React.FC = () => {
 
             {/* Right Column - Schedule Viewing Sidebar */}
             <div className="lg:col-span-1">
-              <ScheduleViewingCard
-                property={{ name: property.title, id: property._id }}
-              />
+              <WalletConnect />
+              <div className="mt-6">
+                <ScheduleViewingCard
+                  property={{ name: property.title, id: property._id }}
+                />
+              </div>
             </div>
           </div>
         </div>
