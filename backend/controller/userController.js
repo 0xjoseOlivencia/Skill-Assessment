@@ -18,6 +18,7 @@ const createtoken = (id, rememberMe = false) => {
   });
 };
 
+dotenv.config({ path: './.env.local' });
 dotenv.config();
 
 const login = async (req, res) => {

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import dotenv from 'dotenv';
 
+dotenv.config({ path: './.env.local' });
 dotenv.config();
 
 // Create a pseudo-transporter that uses Brevo's REST API instead of SMTP
