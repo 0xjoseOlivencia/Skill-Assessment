@@ -2,6 +2,7 @@ import React from "react";
 import { useAccount, useDisconnect, useChainId, useSwitchChain } from "wagmi";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { polygonAmoy } from "wagmi/chains";
+import { toast } from "sonner";
 
 const WalletConnect: React.FC = () => {
   const { address, isConnecting, isConnected } = useAccount();
@@ -9,8 +10,38 @@ const WalletConnect: React.FC = () => {
   const chainId = useChainId();
   const { switchChain } = useSwitchChain();
   const { openConnectModal } = useConnectModal();
+
   const disconnectWallet = () => {
     disconnect();
+  };
+
+  const handleConnect = () => {
+    if (!openConnectModal) {
+      toast.error("Wallet Not Available", {
+        description:
+          "No wallet provider detected. Please install MetaMask or another Web3 wallet.",
+      });
+      return;
+    }
+    openConnectModal();
+  };
+
+  const handleSwitchNetwork = async () => {
+    try {
+      await switchChain({ chainId: polygonAmoy.id });
+    } catch (error: unknown) {
+      const err = error as { code?: number; message?: string };
+      if (err.code === 4001) {
+        toast.error("Request Rejected", {
+          description: "You declined the network switch request.",
+        });
+      } else {
+        toast.error("Network Switch Failed", {
+          description:
+            err.message || "Could not switch to Polygon Amoy. Please try manually in your wallet.",
+        });
+      }
+    }
   };
 
   const isCorrectNetwork = chainId === polygonAmoy.id;
@@ -40,7 +71,7 @@ const WalletConnect: React.FC = () => {
         <p className="font-manrope text-sm text-muted-foreground mb-4">
           Connect your wallet to interact with this property on-chain.
         </p>
-        <button onClick={openConnectModal} className="wallet-btn-primary">
+        <button onClick={handleConnect} className="wallet-btn-primary">
           Connect Wallet
         </button>
       </div>
@@ -67,7 +98,7 @@ const WalletConnect: React.FC = () => {
           </div>
         </div>
         <button
-          onClick={() => switchChain({ chainId: polygonAmoy.id })}
+          onClick={handleSwitchNetwork}
           className="wallet-btn-switch mb-2"
         >
           Switch to Polygon Amoy
